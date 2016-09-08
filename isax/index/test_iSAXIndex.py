@@ -63,11 +63,12 @@ class test_iSAX_Index(unittest.TestCase):
 
     def test_random_insert(self):
         num_entries = 50000
+        search_index = 1000
         index = iSAXIndex(4,4,8)
         search_ts = None
         for x in xrange(num_entries):
             ts_insert = ISAXUtils().generate_random_ts(8)
-            if (x==1000):
+            if (x==search_index):
                 search_ts = ts_insert
                 print "The search ts should be", search_ts
             index.insert_sequence(ts_insert,'ts.txt',1000 + x * 20)
