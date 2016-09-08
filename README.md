@@ -14,46 +14,35 @@ Check out my [report](https://github.com/xdai1091/MEresearch/blob/master/Thesis_
 The iSAX implementation in this repo follows Jin and Eammonn's paper(iSAX: Indexing and Mining Terabyte Sized Time Series). Prof.Shieh's original java implementation was referred for this practice. 
 
 ## How to test it?
-The most important part to test in this implementation is "test_iSAXIndex.py"(under **index** folder). This file will generate a number of time series and index them(the default number is 50000). We pick one of time series as a query and run the approximate search method to find this time-series. The script will return the result. The maximum sereis I tried so far is 50000. As currently I used look-up table (stated in the paper) to represent time-series, there is a maximum number of time-series we could index. 
+The most important part to test in this implementation is "test_iSAXIndex.py"(under **index** folder). This file will generate a number of time series and index them(the default number is 50000). We pick one of time series as a query and run the approximate search method to find this time-series. The script will return the result. The maximum sereis I tried so far is 50000. As currently I used alook-up table (stated in the paper) to represent time-series, there is a maximum number of time-series we could index. 
 
 ## Description of Files
 
-### Data
+There are two big parts of implementation: iSAX representation and indexing. All indexing related files are stored in the **index** folder. All files which start with *test* are unit test files. They can be run to test specific implementation for iSAX. You can read all of those test cases in files. 
 
-The raw data, in the form of CSV files, are all stored in the in the
-`raw-data` folder.  See the README in there for more information. After
-the data gets cleaned, the cleaned data are stored in the `clean-data`
-folder.
+## iSAX Objects
 
-### Data Cleaning
+### iSAX Utilities Tools (iSAXUtils.py)
 
-+ `data-cleaning.ipynb`: This file contains code to convert the raw data
-  into a form more amenable for analysis. Here, we merge information
-  about players' salary and their game statistics, remove NaN values,
-  and create matrices that we will need for indexing purposes.
+This iSAX Utilities tool contains two major functionalities:
 
-### Lineup Selection
++ generate a random time-series given the specific length. 
 
-+ `Simulated Annealing .ipynb`: This file contains code for the
-  simulated annealing and the greedy algorithm, which were used to pick
-  the best lineup.
++ create isax sequence based on given cardinalities
 
-### Player Contribution Estimation
+### iSAX distance look-up table (NormalAlphabet.py)
 
-The notebooks that address this are the following (you should read them
-in this order):
+This file is for looking up iSAX distances, which is described in details in the paper mentioned above.
 
-+ `lbfgs-sgd.ipynb`: Contains code for L-BFGS and SGD.
-+ `Pymc and Pooling.ipynb`: Contains code for our first implementation
-  of PyMC
-+ `Cluster and optimize.ipynb`: Contains implementation of clustering
-  with PyMC.
-+ `ESS_a single game.ipynb`: Contains code for running elliptical slice
-  sampling (ESS) on a single game.
-+ `ESS_entire games.ipynb`: Contains code for running ESS on the whole
-  season.
-+ `Simulated Annealing.ipynb`: Contains code for running simulated annealing to find the best line-up basketball team
-+ `pystan.ipynb`: Contains code for a model in PyStan.
+### Symbol (Symbol.py)
+
++ Each iSAX data point can be treated as one symbol. Each symbol has its own cardinality and integer representation. Each symbol can be promoted to a higher cardinality by calling **promote** method. 
+
+### Sequence (Sequence.py)
+
+A number of consecutive symbols make a sequence of iSAX. One sequence can be used to represent a time series. Each sequence can have mixed-cardinalities symbols. Two sequence's distance can be calculated using the MINDIST formula given in the paper. 
+$MINDIST = \sqrt{\frac{n}{w}}\sqrt{\sum_{i=1}^{w}{{dist(t,s)}^2$
+
 
 ### Player Condition
 
